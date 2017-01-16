@@ -2,7 +2,6 @@ import sys
 import os
 import pdb
 import json
-import numpy as np
 import pandas as pds
 import datetime as dt
 
@@ -57,17 +56,18 @@ class File_Reader:
 
                 products = (json.loads(text))['products']
                 for p in range(0,len(products)):
-
-
-                    d.append({'product_id': products[p]['product_id'], 'product_name': products[p]['product_name'], 'qty_sold': products[p]['qty_sold']})
+                    if products[p]['product_name'] == 'Bottle Deposit' or products[p]['product_name'] == 'To Go' or products[p]['product_name'] == 'To Stay':
+                        None
+                    else:
+                        d.append({'product_id': products[p]['product_id'], 'product_name': products[p]['product_name'], 'qty_sold': products[p]['qty_sold']})
 
         df = pds.DataFrame(data=d, columns=self.col_names)
 
-        os.system('clear')
+
 
         grouped = df.groupby('product_id').sum()
         ordered = grouped.sort_values(by='qty_sold', ascending=False)
-
+    
         result = ordered.head(int(self.product_numb))
         # print(cache)
         for i,r in result.iterrows():
