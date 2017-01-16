@@ -20,8 +20,11 @@ def get_arguments(data_path, number_of_items, output_path, arguments):
         elif arguments[i] == '-n':
              params_args['query_num'] = arguments[i+1]
         elif arguments[i] == '-o':
-            
-             params_args['output'] = arguments[i+1]
+            if os.path.isabs(arguments[i+1]):
+                params_args['output'] = arguments[i+1]
+            else:
+                raise ValueError('Output path must be absolute')
+
              ####make sure this is absolute
     return params_args
 
@@ -86,3 +89,4 @@ class File_Reader:
 query = File_Reader(params['dir_path'], params['query_num'], params['output'], collumn_names)
 query_result = query.top_n_products()
 new_file = query.create_and_send_file(query_result)
+print('Success!')
