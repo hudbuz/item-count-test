@@ -7,6 +7,10 @@ import datetime as dt
 
 args = sys.argv
 
+dir_path = ''
+query_num = ''
+output = ''
+
 def get_arguments(data_path, number_of_items, output_path, arguments):
     params_args = {}
     for i in range(0,len(arguments)):
@@ -19,6 +23,8 @@ def get_arguments(data_path, number_of_items, output_path, arguments):
                 params_args['output'] = arguments[i+1]
             else:
                 raise ValueError('Output path must be absolute')
+
+             ####make sure this is absolute
     return params_args
 
 params = get_arguments(dir_path, query_num, output, args)
@@ -50,7 +56,7 @@ class File_Reader:
 
                 products = (json.loads(text))['products']
                 for p in range(0,len(products)):
-                    if products[p]['product_name'] == 'Bottle Deposit' or products[p]['product_name'] == 'To Go' or products[p]['product_name'] == 'To Stay':
+                    if products[p]['product_name'] == 'Bottle Deposit' or products[p]['product_name'] == 'To go' or products[p]['product_name'] == 'To Stay':
                         None
                     else:
                         d.append({'product_id': products[p]['product_id'], 'product_name': products[p]['product_name'], 'qty_sold': products[p]['qty_sold']})
@@ -61,7 +67,7 @@ class File_Reader:
 
         grouped = df.groupby('product_id').sum()
         ordered = grouped.sort_values(by='qty_sold', ascending=False)
-
+    
         result = ordered.head(int(self.product_numb))
         # print(cache)
         for i,r in result.iterrows():
